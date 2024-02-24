@@ -37,6 +37,152 @@ exit
 fi
 }
 
+cfwarpIP(){
+echo "下载warp优选程序"
+if [[ -n $cpu ]]; then
+curl -L -o warpendpoint -# --retry 2 https://proxy.freecdn.ml?url=https://gitlab.com/rwkgyg/CFwarp/raw/main/point/$cpu
+fi
+}
+
+endipv4(){
+	n=0
+	iplist=100
+	while true
+	do
+		temp[$n]=$(echo 162.159.192.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+	done
+	while true
+	do
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 162.159.192.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 162.159.193.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 162.159.195.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 188.114.96.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 188.114.97.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 188.114.98.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo 188.114.99.$(($RANDOM%256)))
+			n=$[$n+1]
+		fi
+	done
+}
+
+endipv6(){
+	n=0
+	iplist=100
+	while true
+	do
+		temp[$n]=$(echo [2606:4700:d0::$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2)))])
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+		temp[$n]=$(echo [2606:4700:d1::$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2)))])
+		n=$[$n+1]
+		if [ $n -ge $iplist ]
+		then
+			break
+		fi
+	done
+	while true
+	do
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo [2606:4700:d0::$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2)))])
+			n=$[$n+1]
+		fi
+		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
+		then
+			break
+		else
+			temp[$n]=$(echo [2606:4700:d1::$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2))):$(printf '%x\n' $(($RANDOM*2+$RANDOM%2)))])
+			n=$[$n+1]
+		fi
+	done
+}
+
 endipresult(){
 echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
 ulimit -n 102400
