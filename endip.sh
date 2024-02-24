@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#colors
+red='\033[0;31m'
+green='\033[0;32m'
+yellow='\033[0;33m'
+blue='\033[0;34m'
+purple='\033[0;35m'
+cyan='\033[0;36m'
+white='\033[0;37m'
+rest='\033[0m'
+
 case "$(uname -m)" in
 	x86_64 | x64 | amd64 )
 	    cpu=amd64
@@ -14,33 +24,18 @@ case "$(uname -m)" in
         cpu=arm
 	;;
 	* )
-	echo "当前架构为$(uname -m)，暂不支持"
+	echo "The current architecture is $(uname -m), not supported"
 	exit
 	;;
 esac
 
-cfwarpreg(){
-curl -sSL https://gitlab.com/rwkgyg/CFwarp/-/raw/main//point/acwarp.sh -o acwarp.sh && chmod +x acwarp.sh && ./acwarp.sh
-}
-
-warpendipv4v6(){
-echo "1.IPV4优选对端IP"
-echo "2.IPV6优选对端IP"
-echo "0.退出"
-read -p "请选择: " menu
-if [ "$menu" == "1" ];then
-cfwarpIP && endipv4 && endipresult
-elif [ "$menu" == "2" ];then
-cfwarpIP && endipv6 && endipresult
-else 
-exit
-fi
-}
-
 cfwarpIP(){
-echo "下载warp优选程序"
+
+if [[ ! -f "warpendpoint" ]]; then
+echo "Download warp preferred program"
 if [[ -n $cpu ]]; then
-curl -L -o warpendpoint -# --retry 2 https://proxy.freecdn.ml?url=https://raw.githubusercontent.com/reza4292/CFwarp/main/endip.sh/$cpu
+curl -L -o warpendpoint -# --retry 2 https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/$cpu
+fi
 fi
 }
 
@@ -189,26 +184,40 @@ ulimit -n 102400
 chmod +x warpendpoint
 ./warpendpoint
 clear
-cat result.csv | awk -F, '$3!="timeout ms" {print} ' | sort -t, -nk2 -nk3 | uniq | head -11 | awk -F, '{print "端点 "$1" 丢包率 "$2" 平均延迟 "$3}' 
-rm -rf ip.txt warpendpoint
+cat result.csv | awk -F, '$3!="timeout ms" {print} ' | sort -t, -nk2 -nk3 | uniq | head -11 | awk -F, '{print "Endpoint "$1" Packet Loss Rate "$2" Average Delay "$3}'
+Endip_v4=$(cat result.csv | grep -oE "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+:[0-9]+" | head -n 1)
+Endip_v6=$(cat result.csv | grep -oE "\[.*\]:[0-9]+" | head -n 1)
+echo""
+echo -e "${green}Results Saved in result.csv${rest}"
+echo""
+echo -e "${yellow}------------------------------------------${rest}"
+if [ "$Endip_v4" ]; then
+  echo -e "${yellow} Best IPv4:Port ---> ${purple}$Endip_v4 ${rest}"
+elif [ "$Endip_v6" ]; then
+  echo -e "${yellow} Best IPv6:Port ---> ${purple}$Endip_v6 ${rest}"
+else
+  echo -e "${red} No valid IP addresses found.${rest}"
+fi
+echo -e "${yellow}------------------------------------------${rest}"
+rm warpendpoint
+rm -rf ip.txt
 exit
 }
 
-echo "------------------------------------------------------"
+clear
+echo "--------------------------------------------"
 echo "甬哥Github项目  ：github.com/yonggekkk"
-echo "甬哥blogger博客 ：ygkkk.blogspot.com"
-echo "甬哥YouTube频道 ：www.youtube.com/@ygkkk"
-echo "脚本支持WARP优选IP、WARP配置文件生成，感谢CF网友开发"
-echo "------------------------------------------------------"
-echo
-echo "1.WARP-V4V6优选对端IP"
-echo "2.注册生成WARP-Wireguard配置文件、二维码"
-echo "0.退出"
-read -p "请选择: " menu
+echo -e "${yellow}By --> Peyman * Github.com/Ptechgithub *${rest}"
+echo "--------------------------------------------"
+echo""
+echo -e "${purple}1.${green}IPV4 preferred peer IP${rest}"
+echo -e "${purple}2.${green}IPV6 preferred peer IP${rest}"
+echo -e "${purple}0.${green}Exit${rest}"
+read -p "please choose: " menu
 if [ "$menu" == "1" ];then
-warpendipv4v6
+cfwarpIP && endipv4 && endipresult && Endip_v4
 elif [ "$menu" == "2" ];then
-cfwarpreg
+cfwarpIP && endipv6 && endipresult && Endip_v6
 else 
 exit
 fi
