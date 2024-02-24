@@ -41,9 +41,6 @@ cfwarpIP(){
 echo "下载warp优选程序"
 if [[ -n $cpu ]]; then
 curl -L -o warpendpoint -# --retry 2 https://proxy.freecdn.ml?url=https://gitlab.com/rwkgyg/CFwarp/raw/main/point/$cpu
-fi
-
-
 endipresult(){
 echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u > ip.txt
 ulimit -n 102400
