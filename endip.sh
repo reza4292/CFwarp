@@ -34,7 +34,7 @@ cfwarpIP(){
 if [[ ! -f "warpendpoint" ]]; then
 echo "Download warp preferred program"
 if [[ -n $cpu ]]; then
-https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/$cpu
+curl -L -o warpendpoint -# --retry 2 https://raw.githubusercontent.com/Ptechgithub/warp/main/endip/$cpu
 fi
 fi
 }
