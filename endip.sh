@@ -44,7 +44,7 @@ endipv4(){
 	iplist=100
 	while true
 	do
-		temp[$n]=$(echo 172.16.0.$(($RANDOM%256)))
+		temp[$n]=$(echo 104.24.164.$(($RANDOM%256)))
 		n=$[$n+1]
 		if [ $n -ge $iplist ]
 		then
@@ -93,7 +93,7 @@ endipv4(){
 		then
 			break
 		else
-			temp[$n]=$(echo 172.16.0.$(($RANDOM%256)))
+			temp[$n]=$(echo 104.24.164.$(($RANDOM%256)))
 			n=$[$n+1]
 		fi
 		if [ $(echo ${temp[@]} | sed -e 's/ /\n/g' | sort -u | wc -l) -ge $iplist ]
