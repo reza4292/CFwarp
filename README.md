@@ -1,6 +1,9 @@
+کانفیگ
 
 
 
+
+https://github.com/reza4292/CFwarp/blob/main/configure.json
 
 
 
